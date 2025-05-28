@@ -1,2 +1,7 @@
-BOT_TOKEN = "7707028596:AAGTLQJGEBhDXeSHoMFjLN4f3ccUx9CR3hE"
-RECEIVER_ADDRESS = "номер карты, BTC-адрес"
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+

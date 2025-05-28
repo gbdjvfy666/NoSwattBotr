@@ -1,7 +1,6 @@
 from aiogram import Router, types, F
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters import CommandStart
-from config import RECEIVER_ADDRESS
 from database import add_user
 from aiogram.utils.markdown import hlink
 
