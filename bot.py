@@ -1,18 +1,23 @@
 from aiogram import Bot, Dispatcher
-from aiogram.types import BotCommand
 from aiogram.enums import ParseMode
-from handlers import shop
+from aiogram.client.default import DefaultBotProperties
 import asyncio
 import logging
-
+from handlers import start, shop, profile
 from config import BOT_TOKEN
 
 async def main():
-    create_tables()
     logging.basicConfig(level=logging.INFO)
-    bot = Bot(token=BOT_TOKEN, parse_mode=ParseMode.HTML)
+
+    bot = Bot(
+        token=BOT_TOKEN,
+        default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+    )
+    logging.basicConfig(level=logging.INFO)
     dp = Dispatcher()
+    dp.include_router(start.router)
     dp.include_router(shop.router)
+    dp.include_router(profile.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)
