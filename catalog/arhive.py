@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
@@ -19,9 +19,20 @@ async def archives_callback(callback_query: types.CallbackQuery):
         "💡 <i>Хватит тратить время на поиски — у нас всё уже собрано!</i>"
     )
 
+    # Кнопки под сообщением
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Разное", callback_data="archive_misc"),
+         InlineKeyboardButton(text="Подписки", callback_data="archive_subs")],
+        [InlineKeyboardButton(text="Любительское", callback_data="archive_lovers"),
+         InlineKeyboardButton(text="Эксклюзивное", callback_data="archive_exclusive")],
+        [InlineKeyboardButton(text="Пробный архив", callback_data="archive_trial"),
+         InlineKeyboardButton(text="Хентай", callback_data="archive_hentai")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=markup
     )
     await callback_query.answer()

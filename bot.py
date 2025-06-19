@@ -1,11 +1,19 @@
+import asyncio
+import logging
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
-import asyncio
-import logging
-from handlers import start, shop, profile
+
 from config import BOT_TOKEN
-from catalog.traffic import router as traffic_router
+from database import create_user_table
+
+# Хендлеры
+from handlers import start, shop, profile
+from handlers.balance import router as balance_router
+from handlers.support import router as support_router
+
+# Каталог
+from catalog.Traffic.traffic import router as traffic_router
 from catalog.abuse import router as abuse_router
 from catalog.arhive import router as arhive_router
 from catalog.magazinakk import router as magazinakk_router
@@ -27,14 +35,15 @@ from catalog.lastticket import router as lastticket_router
 async def main():
     logging.basicConfig(level=logging.INFO)
 
-    
+    await create_user_table()
 
     bot = Bot(
         token=BOT_TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
-    logging.basicConfig(level=logging.INFO)
     dp = Dispatcher()
+
+    # Роутеры
     dp.include_router(start.router)
     dp.include_router(shop.router)
     dp.include_router(profile.router)
@@ -55,11 +64,19 @@ async def main():
     dp.include_router(ideas_router)
     dp.include_router(scripts_router)
     dp.include_router(lastticket_router)
-
-
+    dp.include_router(balance_router)
+    dp.include_router(support_router)
 
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+
+    try:
+        await dp.start_polling(bot)
+    except asyncio.CancelledError:
+        print("Polling cancelled. Shutting down...")
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Bot manually stopped.")

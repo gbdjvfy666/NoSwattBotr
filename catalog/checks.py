@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
@@ -15,9 +15,18 @@ async def checks_callback(callback_query: types.CallbackQuery):
         "Читайте подробнее👇"
     )
 
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="ЧЕКИ С БАЛАНСОМ • 750₽", callback_data="check_basic")],
+        [InlineKeyboardButton(text="GOLD ЧЕКИ С БАЛАНСОМ • 899₽", callback_data="check_gold")],
+        [InlineKeyboardButton(text="VIP ЧЕКИ С БАЛАНСОМ • 1875₽", callback_data="check_vip")],
+        [InlineKeyboardButton(text="ОПТ | ЧЕКИ С БАЛАНСОМ • 5250₽", callback_data="check_opt")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_catalog")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
+        reply_markup=markup,
         parse_mode="HTML"
     )
 

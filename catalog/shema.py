@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
@@ -15,10 +15,20 @@ async def shema_callback(callback_query: types.CallbackQuery):
         "📈 Лей, зарабатывай, масштабируй!"
     )
 
+    # Инлайн-кнопки
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔥 Лучшие схемы", callback_data="shema_best")],
+        [InlineKeyboardButton(text="💼 Схемы заработка", callback_data="shema_money")],
+        [InlineKeyboardButton(text="💸 Дешевые схемы", callback_data="shema_cheap")],
+        [InlineKeyboardButton(text="📦 Паки схем", callback_data="shema_packs")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_shop")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=markup
     )
 
     await callback_query.answer()

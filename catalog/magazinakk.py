@@ -1,12 +1,11 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
 @router.callback_query(lambda c: c.data == "item_accounts")
 async def accounts_callback(callback_query: types.CallbackQuery):
-    # Фото (обложка для магазина аккаунтов)
-    photo = FSInputFile("images/magazinakk.jpg") 
+    photo = FSInputFile("images/magazinakk.jpg")  # Убедись, что путь корректный
 
     caption = (
         "🏬 <b>Магазин аккаунтов</b> 📦\n\n"
@@ -21,10 +20,21 @@ async def accounts_callback(callback_query: types.CallbackQuery):
         "💸 Работай, заливай, запускай — всё готово!"
     )
 
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="VPN", callback_data="acc_vpn"),
+         InlineKeyboardButton(text="Соц.Сети", callback_data="acc_social")],
+        [InlineKeyboardButton(text="Кинотеатры", callback_data="acc_cinema"),
+         InlineKeyboardButton(text="Нейросети", callback_data="acc_ai")],
+        [InlineKeyboardButton(text="Эл.Почты", callback_data="acc_email"),
+         InlineKeyboardButton(text="Файлообменник", callback_data="acc_files")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_shop")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=markup
     )
 
     await callback_query.answer()

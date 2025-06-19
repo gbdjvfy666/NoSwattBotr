@@ -1,11 +1,10 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
 @router.callback_query(lambda c: c.data == "item_abuse")
 async def abuse_callback(callback_query: types.CallbackQuery):
-
     photo = FSInputFile("images/abuse.jpg") 
 
     caption = (
@@ -19,9 +18,18 @@ async def abuse_callback(callback_query: types.CallbackQuery):
         "🔥 Готовые схемы ждут тебя. Успей первым!"
     )
 
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="💥 Лучшие Абузы", callback_data="buy_best_abuse")],
+        [InlineKeyboardButton(text="📜 Схемы Абуза", callback_data="buy_abuse_schemes")],
+        [InlineKeyboardButton(text="💸 Дешевые Абузы", callback_data="buy_cheap_abuse")],
+        [InlineKeyboardButton(text="📦 Паки Абузов", callback_data="buy_abuse_packs")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_catalog")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
-        parse_mode="HTML"
+        parse_mode="HTML",
+        reply_markup=markup
     )
     await callback_query.answer()

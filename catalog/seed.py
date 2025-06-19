@@ -1,5 +1,5 @@
 from aiogram import Router, types
-from aiogram.types import FSInputFile
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 router = Router()
 
@@ -17,9 +17,16 @@ async def seed_callback(callback_query: types.CallbackQuery):
         "⚡️Читай подробнее по кнопке👇"
     )
 
+    markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="ОБЫЧНАЯ ПОКУПКА", callback_data="seed_buy_regular")],
+        [InlineKeyboardButton(text="ОПТОВАЯ ПОКУПКА", callback_data="seed_buy_bulk")],
+        [InlineKeyboardButton(text="🔙 Назад", callback_data="back_to_catalog")]
+    ])
+
     await callback_query.message.answer_photo(
         photo=photo,
         caption=caption,
+        reply_markup=markup,
         parse_mode="HTML"
     )
 

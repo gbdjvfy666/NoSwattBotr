@@ -1,49 +1,37 @@
-import sqlite3
+import aiosqlite
+from datetime import datetime
 
-def connect():
-    return sqlite3.connect("database.db")
+DB_PATH = "database.db"
 
-def create_tables():
-    with connect() as conn:
-        c = conn.cursor()
-        c.execute("""
+async def create_user_table():
+    async with aiosqlite.connect(DB_PATH) as db:
+        await db.execute("""
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY,
-                username TEXT,
-                reg_date TEXT,
-                balance REAL DEFAULT 0,
-                partner_balance REAL DEFAULT 0,
-                referrer_id INTEGER,
-                total_purchases INTEGER DEFAULT 0
+                user_id INTEGER PRIMARY KEY,
+                registration_date TEXT,
+                balance INTEGER DEFAULT 0,
+                partner_balance INTEGER DEFAULT 0,
+                purchases INTEGER DEFAULT 0
             )
         """)
-        conn.commit()
+        await db.commit()
 
-def add_user(user_id: int, username: str, reg_date: str, referrer_id: int = None):
-    with connect() as conn:
-        c = conn.cursor()
-        c.execute("SELECT id FROM users WHERE id = ?", (user_id,))
-        if c.fetchone() is None:
-            c.execute("""
-                INSERT INTO users (id, username, reg_date, referrer_id)
-                VALUES (?, ?, ?, ?)
-            """, (user_id, username, reg_date, referrer_id))
-            conn.commit()
+async def get_or_create_user(user_id: int):
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute("SELECT * FROM users WHERE user_id = ?", (user_id,)) as cursor:
+            user = await cursor.fetchone()
+        if not user:
+            date = datetime.now().strftime("%d.%m.%Y")
+            await db.execute(
+                "INSERT INTO users (user_id, registration_date) VALUES (?, ?)",
+                (user_id, date)
+            )
+            await db.commit()
 
-def get_user(user_id):
-    with connect() as conn:
-        c = conn.cursor()
-        c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
-        return c.fetchone()
-
-def update_balance(user_id, amount):
-    with connect() as conn:
-        c = conn.cursor()
-        c.execute("UPDATE users SET balance = balance + ? WHERE id = ?", (amount, user_id))
-        conn.commit()
-
-def update_partner_balance(user_id, amount):
-    with connect() as conn:
-        c = conn.cursor()
-        c.execute("UPDATE users SET partner_balance = partner_balance + ? WHERE id = ?", (amount, user_id))
-        conn.commit()
+async def get_user_profile(user_id: int):
+    async with aiosqlite.connect(DB_PATH) as db:
+        async with db.execute(
+            "SELECT registration_date, balance, partner_balance, purchases FROM users WHERE user_id = ?",
+            (user_id,)
+        ) as cursor:
+            return await cursor.fetchone()

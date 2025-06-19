@@ -1,10 +1,14 @@
 from aiogram import Router, F
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, FSInputFile
+import asyncio
 
 router = Router()
 
+
 @router.message(F.text == "🏪 Каталог товаров")
 async def show_shop_from_text(message: Message):
+    await message.answer_sticker("CAACAgEAAxkBAAEP9IxoUu0tUPTVDBRwslu--ky31FQDigACpAEAAoxCsEXB42eYSJNPqjYE")
+    await asyncio.sleep(0.3)
     markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🔥 Деньги на трафике  🔥", callback_data="item_traffic")],
         [InlineKeyboardButton(text="📂 Абузы", callback_data="item_abuse"),
@@ -25,11 +29,9 @@ async def show_shop_from_text(message: Message):
         [InlineKeyboardButton(text="🎫 Последний билет", callback_data="item_lastticket")]
     ])
 
-    # Путь к изображению (можно и URL, если файл загружен в интернет)
-    photo = FSInputFile("images/ourgoods.jpg")  # Убедись, что файл существует
+    photo = FSInputFile("images/ourgoods.jpg")
 
     await message.answer_photo(
         photo=photo,
-        caption="📦 <b>Каталог товаров:</b>",
         reply_markup=markup
     )
