@@ -14,7 +14,7 @@ from .Buttons.dorway import router as buy_dorway_router
 
 router = Router()
 
-# Подключаем всё
+
 router.include_router(buy_2025_router)
 router.include_router(buy_ubt_tg_router)
 router.include_router(buy_neurocom_router)
