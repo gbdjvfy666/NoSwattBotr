@@ -3,9 +3,13 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from .Buttons.buy_abuse_1 import router as abuse_1_router
 from .Buttons.buy_abuse_2 import router as abuse_2_router
 from .Buttons.buy_abuse_3 import router as abuse_3_router
+from .Buttons.buy_abuse_4 import router as abuse_4_router
+from .Buttons.buy_abuse_5 import router as abuse_5_router
 
 router = Router()
 
+router.include_router(abuse_5_router)
+router.include_router(abuse_4_router)
 router.include_router(abuse_3_router)
 router.include_router(abuse_2_router)
 router.include_router(abuse_1_router)
