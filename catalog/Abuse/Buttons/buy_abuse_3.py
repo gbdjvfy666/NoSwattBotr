@@ -37,7 +37,7 @@ async def abuse_3_callback(callback_query: types.CallbackQuery):
 
     await callback_query.message.edit_media(
         media=InputMediaPhoto(
-            media=photo_url,
+            media=photo,
             caption=caption,
             parse_mode="HTML"
         ),
