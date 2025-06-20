@@ -1,7 +1,10 @@
 from aiogram import Router, types
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
+from .best_abuse import router as buy_best_abuse_router
+
 
 router = Router()
+router.include_router(buy_best_abuse_router)
 
 @router.callback_query(lambda c: c.data == "item_abuse")
 async def abuse_callback(callback_query: types.CallbackQuery):

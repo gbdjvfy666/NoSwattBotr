@@ -14,7 +14,7 @@ from handlers.support import router as support_router
 
 # Каталог
 from catalog.Traffic.traffic import router as traffic_router
-from catalog.abuse import router as abuse_router
+from catalog.Abuse.abuse import router as abuse_router
 from catalog.arhive import router as arhive_router
 from catalog.magazinakk import router as magazinakk_router
 from catalog.buisness import router as business_router
