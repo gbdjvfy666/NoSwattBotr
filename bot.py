@@ -3,6 +3,8 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
+from catalog.Abuse.buy_abuse_schemes import router as buy_abuse_schemes_router
+from catalog.Abuse.best_abuse import router as best_abuse_router
 
 from config import BOT_TOKEN
 from database import create_user_table
@@ -66,7 +68,8 @@ async def main():
     dp.include_router(lastticket_router)
     dp.include_router(balance_router)
     dp.include_router(support_router)
-
+    dp.include_router(buy_abuse_schemes_router)
+    dp.include_router(best_abuse_router)
     await bot.delete_webhook(drop_pending_updates=True)
 
     try:
